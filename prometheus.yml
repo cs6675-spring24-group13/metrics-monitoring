@@ -1,0 +1,27 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'kafka'
+    static_configs:
+      - targets: ['kafka:9092']
+
+  - job_name: 'spark-worker'
+    metrics_path: '/metrics/prometheus'
+    static_configs:
+      - targets: ['spark-worker:8081']
+      # - targets: ['spark://spark-worker:41809']
+
+  - job_name: 'spark-master'
+    metrics_path: '/metrics/master/prometheus'
+    static_configs:
+      - targets: ['spark-master:8080']
+
+  - job_name: 'spark-executor'
+    metrics_path: '/metrics/prometheus'
+    static_configs:
+      - targets: ['spark-master:4040']
+
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']

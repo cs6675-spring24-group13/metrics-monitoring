@@ -1,0 +1,48 @@
+version: '3.7'
+services:
+  prometheus:
+    image: prom/prometheus:v2.26.0
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - hadoop_network
+    depends_on:
+      - node-exporter
+    restart: unless-stopped
+
+  node-exporter:
+    image: prom/node-exporter:v1.0.1
+    container_name: node-exporter
+    ports:
+      - 9100:9100
+    restart: unless-stopped
+    networks:
+      - hadoop_network
+
+  grafana:
+    image: grafana/grafana:7.5.4
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: "admin" # Change this!
+    networks:
+      - hadoop_network
+    restart: unless-stopped
+
+volumes:
+  grafana_data:
+
+networks:
+  hadoop_network:
+    name: spark_hadoop_network
+    external: true
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.20.0.0/16"
