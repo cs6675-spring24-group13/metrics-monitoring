@@ -26,3 +26,4 @@ examples would be as the following but we are still working on it.
 
 ![grafana](./image/grafana-example.png)
 
+**If you changed the Grafana dashboard and want to use it for the next time after shutdown the docker, be sure to export the dashboard to a json file and update `/grafana/dashboards/main-dashboard.json`**
